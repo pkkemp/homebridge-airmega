@@ -1,22 +1,30 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es2017"],
+    "target": "ES2018", // ~node10
     "module": "commonjs",
-    "outDir": "dist",
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018"
+    ],
+    "allowJs": true, // NOTE: relic from original code, related to util/aes?
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
-    "allowJs": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": false, // FIXME: make work in strict mode
+    "esModuleInterop": true,
+    "noImplicitAny": false, // ~template
+    "noUnusedLocals": true, // ~original
+    "noUnusedParameters": true // ~original
   },
-  "files": [
-    "index.ts"
-  ],
   "include": [
-    "lib/**/*.ts"
+    "src/"
   ],
   "exclude": [
-    "node_modules"
+    "**/*.spec.ts"
   ]
 }
