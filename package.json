@@ -1,5 +1,5 @@
 {
-	"name": "homebridge-airmega",
+	"name": "@mroth/homebridge-airmega",
 	"version": "3.2.0-alpha.0",
 	"description": "Homebridge plugin for the Airmega air purifier",
 	"main": "./dist/index.js",
