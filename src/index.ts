@@ -8,4 +8,4 @@ export = (homebridge) => {
   HAP.UUID = homebridge.hap.uuid;
 
   homebridge.registerPlatform('homebridge-airmega', 'Airmega', AirmegaPlatform, true);
-}
+};
