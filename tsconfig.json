@@ -9,7 +9,6 @@
       "es2017",
       "es2018"
     ],
-    "allowJs": true, // NOTE: relic from original code, related to util/aes?
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

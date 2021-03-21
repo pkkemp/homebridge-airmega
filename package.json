@@ -11,11 +11,13 @@
 	],
 	"license": "MIT",
 	"dependencies": {
+		"crypto-js": "^4.0.0",
 		"request": "^2.88",
 		"request-promise": "^4.2.4",
 		"store": "^2.0.12"
 	},
 	"devDependencies": {
+		"@types/crypto-js": "^4.0.1",
 		"@types/node": "^14.14.35",
 		"@types/request-promise": "^4.1.41",
 		"@types/storejs": "^2.0.2",

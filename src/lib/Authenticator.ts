@@ -1,4 +1,5 @@
 import * as request from 'request-promise';
+import { AES } from 'crypto-js';
 
 import { Client } from './Client';
 import { Config } from './Config';
@@ -6,7 +7,6 @@ import { OAuthPayload, Payload } from './interfaces/Request';
 import { TokenPair } from './interfaces/TokenStore';
 import { Logger } from './Logger';
 import { Purifier } from './Purifier';
-import { AesUtil, CryptoJS } from './util/aes';
 
 export class Authenticator extends Client {
 
@@ -55,9 +55,6 @@ export class Authenticator extends Client {
   }
 
   private async authenticate(stateId: string, username: string, password: string): Promise<string> {
-    let iv = CryptoJS.lib.WordArray.random(16);
-    let key = CryptoJS.lib.WordArray.random(16);
-    let encryptedPassword = AesUtil.encrypt(iv, password, key);
 
     let payload = {
       uri: Config.Auth.SIGNIN_URL,
@@ -69,7 +66,7 @@ export class Authenticator extends Client {
       },
       body: {
         'username': username,
-        'password': encryptedPassword.toString(),
+        'password': this.encryptPass(password),
         'state': stateId,
         'auto_login': 'Y'
       }
@@ -80,6 +77,18 @@ export class Authenticator extends Client {
 
     return cookies;
   }
+
+  // Replacement algorithm for lib/util/aes
+  // NOTE(mroth): found a more readable algorithm at https://github.com/evandcoleman/python-iocare/blob/master/iocare/iocareapi.py
+  private encryptPass(password: string): string {
+    let iv = CryptoJS.lib.WordArray.random(16);
+    let key = CryptoJS.lib.WordArray.random(16);
+    let i = iv.toString(CryptoJS.enc.Base64);
+    let k = key.toString(CryptoJS.enc.Base64);
+    let encryptedPass = AES.encrypt(password, key, { iv: iv });
+    let passBlockStr = i + ":" + encryptedPass.ciphertext.toString() + ":" + k;
+    return passBlockStr;
+  } 
 
   private async getAuthCode(cookies: string): Promise<string> {
     let payload = this.buildOauthPayload(cookies);
