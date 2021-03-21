@@ -20,7 +20,9 @@ export class AirmegaPlatform {
     this.platform = platform;
     this.accessories = new Map<string, Accessory>();
 
-    if (!this.platform) return;
+    if (!this.platform) {
+      return;
+    }
 
     this.platform.on('didFinishLaunching', () => {
       if (!config.username || !config.password) {
@@ -30,7 +32,7 @@ export class AirmegaPlatform {
       Logger.log('Authenticating...');
 
       try {
-        let authenticator = new Authenticator();
+        const authenticator = new Authenticator();
 
         authenticator.login(config.username, config.password).then(tokens => {
           authenticator.getPurifiers(tokens).then(purifiers => {
@@ -48,14 +50,14 @@ export class AirmegaPlatform {
   }
 
   registerAccessory(purifier: Purifier, config: any): void {
-    let uuid = HAP.UUID.generate(purifier.name);
+    const uuid = HAP.UUID.generate(purifier.name);
     let accessory = this.accessories.get(uuid);
 
     if (!accessory) {
       accessory = new HAP.Accessory(purifier.name, uuid);
       this.accessories.set(accessory.UUID, accessory);
 
-        this.platform.registerPlatformAccessories('homebridge-airmega', 'Airmega', [accessory]);
+      this.platform.registerPlatformAccessories('homebridge-airmega', 'Airmega', [accessory]);
     }
 
     this.registerServices(purifier, accessory, config);
@@ -69,16 +71,16 @@ export class AirmegaPlatform {
       .setCharacteristic(HAP.Characteristic.Model, 'Airmega')
       .setCharacteristic(HAP.Characteristic.SerialNumber, purifier.id);
 
-    let purifierService = new PurifierService(purifier, accessory);
+    const purifierService = new PurifierService(purifier, accessory);
     purifierService.register();
 
-    let airQualityService = new AirQualityService(purifier, accessory);
+    const airQualityService = new AirQualityService(purifier, accessory);
     airQualityService.register();
 
-    let filterService = new FilterService(purifier, accessory);
+    const filterService = new FilterService(purifier, accessory);
     filterService.register();
 
-    let lightService = new LightbulbService(purifier, accessory);
+    const lightService = new LightbulbService(purifier, accessory);
 
     if (this.shouldExcludeAccessory(config, 'lightbulb')) {
       this.removeService(accessory, HAP.Service.Lightbulb);
@@ -88,7 +90,9 @@ export class AirmegaPlatform {
   }
 
   shouldExcludeAccessory(config: PluginConfig, name: string) {
-    if (!config.hasOwnProperty('exclude')) return false;
+    if (!config.hasOwnProperty('exclude')) {
+      return false;
+    }
 
     return config.exclude.includes(name);
   }

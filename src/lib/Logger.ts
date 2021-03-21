@@ -1,7 +1,7 @@
-import { Log } from "./interfaces/HAP";
+import { Log } from './interfaces/HAP';
 
 class AirmegaLogger {
-  public  log: Log;
+  public log: Log;
   private debugMode: boolean;
   private diagnosticMode: boolean;
 
@@ -12,29 +12,33 @@ class AirmegaLogger {
   }
 
   debug(message: string, data?: any): void {
-    if (!this.debugMode) return;
+    if (!this.debugMode) {
+      return;
+    }
 
     let result = message;
     if (data) {
-      result += `: ${JSON.stringify(data)}`
+      result += `: ${JSON.stringify(data)}`;
     }
 
     this.log(result);
   }
 
   diagnostic(message: string, data?: any): void {
-      if (!this.diagnosticMode) return;
+    if (!this.diagnosticMode) {
+      return;
+    }
 
-      let result = message;
-      if (data) {
-          result += `: ${JSON.stringify(data)}`
-      }
+    let result = message;
+    if (data) {
+      result += `: ${JSON.stringify(data)}`;
+    }
 
-      this.log(result);
+    this.log(result);
   }
 
   error(message: string, error: Error) {
-    this.log(`[ERROR] ${message}. ${error.message}`)
+    this.log(`[ERROR] ${message}. ${error.message}`);
   }
 }
 

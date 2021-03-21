@@ -5,8 +5,8 @@ export class Deferred<T> implements Promise<T> {
 
   constructor() {
     this.promise = new Promise((resolve, reject) => {
-      this.resolveSelf = resolve
-      this.rejectSelf = reject
+      this.resolveSelf = resolve;
+      this.rejectSelf = reject;
     });
   }
 
@@ -14,20 +14,25 @@ export class Deferred<T> implements Promise<T> {
     onfulfilled?: ((value: T) =>
     TResult1 | PromiseLike<TResult1>) | undefined | null,
     onrejected?: ((reason: any) =>
-    TResult2 | PromiseLike<TResult2>) | undefined | null
-    ): Promise<TResult1 | TResult2> {
-      return this.promise.then(onfulfilled, onrejected)
-    }
+    TResult2 | PromiseLike<TResult2>) | undefined | null,
+  ): Promise<TResult1 | TResult2> {
+    return this.promise.then(onfulfilled, onrejected);
+  }
 
   public catch<TResult = never>(
     onrejected?: ((reason: any) =>
-    TResult | PromiseLike<TResult>) | undefined | null
-    ): Promise<T | TResult> {
-      return this.promise.then(onrejected)
-    }
+    TResult | PromiseLike<TResult>) | undefined | null,
+  ): Promise<T | TResult> {
+    return this.promise.then(onrejected);
+  }
 
-  public resolve(val?:T) { this.resolveSelf(val) }
-  public reject(reason:any) { this.rejectSelf(reason) }
+  public resolve(val?:T) {
+    this.resolveSelf(val);
+  }
 
-  [Symbol.toStringTag]: 'Promise'
+  public reject(reason:any) {
+    this.rejectSelf(reason);
+  }
+
+  [Symbol.toStringTag]: 'Promise';
 }

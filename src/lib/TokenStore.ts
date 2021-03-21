@@ -15,7 +15,7 @@ export class TokenStore {
   }
 
   async getTokens(): Promise<TokenPair> {
-    let tokens = store.get(TokenStore.TOKEN_KEY);
+    const tokens = store.get(TokenStore.TOKEN_KEY);
 
     if (!this.isExpired()) {
       return tokens;
@@ -24,8 +24,8 @@ export class TokenStore {
     Logger.debug('Auth tokens are expired, refreshing...');
 
     try {
-      let authenticator = new Authenticator();
-      let newTokens = await authenticator.refreshTokens(tokens);
+      const authenticator = new Authenticator();
+      const newTokens = await authenticator.refreshTokens(tokens);
 
       this.saveTokens(newTokens);
 
@@ -38,7 +38,7 @@ export class TokenStore {
   }
 
   isExpired(): boolean {
-    let tokens: TokenPair = store.get('tokens');
+    const tokens: TokenPair = store.get('tokens');
 
     return (Date.now() - tokens.storedAt) >= TokenStore.TOKEN_EXP_LENGTH;
   }

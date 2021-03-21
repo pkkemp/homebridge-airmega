@@ -35,8 +35,8 @@ export class Purifier {
   }
 
   async waitForStatusUpdate(): Promise<Status> {
-    let status = await this.purifierStatusUpdater.wait(() =>
-      this.client.getStatus(this.id)
+    const status = await this.purifierStatusUpdater.wait(() =>
+      this.client.getStatus(this.id),
     );
 
     this.setStatus(status);
@@ -45,8 +45,8 @@ export class Purifier {
   }
 
   async waitForFilterStatusUpdate(): Promise<FilterStatus[]> {
-    let status = await this.filterStatusUpdater.wait(() =>
-      this.client.getFilterStatus(this.id)
+    const status = await this.filterStatusUpdater.wait(() =>
+      this.client.getFilterStatus(this.id),
     );
 
     return status;

@@ -8,7 +8,7 @@ export namespace Config {
   }
 
   export namespace Auth {
-    export const OAUTH_URL = 'https://idp.coway.com/oauth2/v1/authorize'
+    export const OAUTH_URL = 'https://idp.coway.com/oauth2/v1/authorize';
     export const SIGNIN_URL = 'https://idp.coway.com/user/signin/';
     export const REDIRECT_URL = 'https://iocareapp.coway.com/bizmob.iocare/redirect/redirect.html';
     export const CLIENT_ID = 'UmVuZXdhbCBBcHA';

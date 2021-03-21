@@ -11,14 +11,14 @@ export class StatusUpdater<T> {
 
   async wait(task: () => Promise<T>): Promise<T> {
     if (this.locked) {
-      let result = await this.deferred;
+      const result = await this.deferred;
       return result;
     }
 
     this.locked = true;
 
     try {
-      let result = await task();
+      const result = await task();
       this.deferred.resolve(result);
 
       return result;
