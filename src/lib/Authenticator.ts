@@ -1,9 +1,10 @@
 import * as request from 'request-promise';
-import { AES } from 'crypto-js';
+import { parse } from 'node-html-parser';
+import { decode } from 'html-entities';
 
 import { Client } from './Client';
 import { Config } from './Config';
-import { OAuthPayload, Payload } from './interfaces/Request';
+import { OpenIDPayload, AuthCode2Payload, Payload } from './interfaces/Request';
 import { TokenPair } from './interfaces/TokenStore';
 import { Logger } from './Logger';
 import { Purifier } from './Purifier';
@@ -11,11 +12,10 @@ import { Purifier } from './Purifier';
 export class Authenticator extends Client {
 
   async login(username: string, password: string): Promise<TokenPair> {
-    const stateId = await this.getStateId();
-    const cookies = await this.authenticate(stateId, username, password);
-    const authCode = await this.getAuthCode(cookies);
+    const authCode = await this.authenticateOpenID(username, password);
+    Logger.debug('got authCode', authCode);
+    const tokens = await this.getTokensFromOpenIDAuthCode(authCode);
 
-    const tokens = await this.getTokensFromAuthCode(authCode);
     this.tokenStore.saveTokens(tokens);
 
     return tokens;
@@ -36,7 +36,7 @@ export class Authenticator extends Client {
     Logger.debug('Sending payload', payload);
 
     const response = await request.post(payload);
-    Logger.debug('Sending payload', payload);
+    Logger.debug('Got response', response);
 
     const tokens = {
       accessToken: response.header.accessToken,
@@ -46,60 +46,33 @@ export class Authenticator extends Client {
     return tokens;
   }
 
-  private async getStateId(): Promise<string> {
-    const payload = this.buildOauthPayload();
+  private async authenticateOpenID(username: string, password: string): Promise<string> {
+    const payload = this.buildOpenIDPayload();
+    Logger.debug('Sending payload', payload);
+
     const response = await request.get(payload);
-    const query = response.request.uri.query;
+    Logger.debug('Got response', response);
 
-    return query.match(/(?<=state\=)(.*?)$/)[0];
-  }
-
-  private async authenticate(stateId: string, username: string, password: string): Promise<string> {
-
-    const payload = {
-      uri: Config.Auth.SIGNIN_URL,
-      resolveWithFullResponse: true,
-      json: true,
-      headers: {
-        'Content-Type': Config.ContentType.JSON,
-        'User-Agent': Config.USER_AGENT,
-      },
-      body: {
-        'username': username,
-        'password': this.encryptPass(password),
-        'state': stateId,
-        'auto_login': 'Y',
-      },
-    };
-
-    const response = await request.post(payload);
     const cookies = response.headers['set-cookie'];
 
-    return cookies;
+    // //*[@id="kc-form-login"]/@action
+    const root = parse.parse(response.body);
+    const form = root.getElementById('kc-form-login');
+    const action = form.getAttribute('action');
+
+    const payload2 = this.buildOpenID2Payload(cookies, username, password);
+    payload2.uri = decode(action);
+    Logger.debug('Sending payload2', payload2);
+
+    const response2 = await request.post(payload2);
+    Logger.debug('Get response2', response2);
+
+    const location_hdr = response2.headers['location'];
+    return location_hdr.match(/[^&]+&code=(.*)/)[1];
   }
 
-  // Replacement algorithm for lib/util/aes
-  // NOTE(mroth): found a more readable algorithm at https://github.com/evandcoleman/python-iocare/blob/master/iocare/iocareapi.py
-  private encryptPass(password: string): string {
-    const iv = CryptoJS.lib.WordArray.random(16);
-    const key = CryptoJS.lib.WordArray.random(16);
-    const i = iv.toString(CryptoJS.enc.Base64);
-    const k = key.toString(CryptoJS.enc.Base64);
-    const encryptedPass = AES.encrypt(password, key, { iv: iv });
-    const passBlockStr = i + ':' + encryptedPass.ciphertext.toString() + ':' + k;
-    return passBlockStr;
-  }
-
-  private async getAuthCode(cookies: string): Promise<string> {
-    const payload = this.buildOauthPayload(cookies);
-    const response = await request.get(payload);
-    const query = response.request.uri.query;
-
-    return query.match(/(?<=code\=)(.*?)(?=\&)/)[0];
-  }
-
-  private async getTokensFromAuthCode(authCode: string): Promise<TokenPair> {
-    const payload = this.buildFinishOauthPayload(authCode);
+  private async getTokensFromOpenIDAuthCode(authCode: string): Promise<TokenPair> {
+    const payload = this.buildFinishOpenIDPayload(authCode);
     Logger.debug('Sending payload', payload);
 
     const response = await request.post(payload);
@@ -113,32 +86,58 @@ export class Authenticator extends Client {
     return tokens;
   }
 
-  // Similar OAuth payloads are used when retrieving the state ID as well
-  // as the auth code, the latter of which requires cookies.
-  private buildOauthPayload(cookies?: string): OAuthPayload {
-    const payload: OAuthPayload = {
-      uri: Config.Auth.OAUTH_URL,
+  private buildOpenIDPayload(): OpenIDPayload {
+    const payload: OpenIDPayload = {
+      uri: Config.Auth.OPENID_URL,
       resolveWithFullResponse: true,
       headers: {
         'User-Agent': Config.USER_AGENT,
-        Cookie: cookies,
+        'Accept': Config.ACCEPT,
+        'Accept-Language': Config.ACCEPT_LANGUAGE,
       },
       qs: {
         auth_type: 0,
         response_type: 'code',
-        client_id: Config.Auth.CLIENT_ID,
-        scope: 'login',
-        lang: 'en_US',
-        redirect_url: Config.Auth.REDIRECT_URL,
+        client_id: Config.Auth.OPENID_CLIENT_ID,
+        ui_locales: 'en_US',
+        dvc_cntry_id: 'US',
+        redirect_uri: Config.Auth.REDIRECT_URL2,
       },
     };
 
     return payload;
   }
 
-  private buildFinishOauthPayload(authCode: string): Payload {
+  private buildOpenID2Payload(cookies: string, username: string, password: string): AuthCode2Payload {
+    const payload: AuthCode2Payload = {
+      uri: '',
+      simple: false,
+      resolveWithFullResponse: true,
+      headers: {
+        'User-Agent': Config.USER_AGENT,
+        Cookie: cookies,
+      },
+      form: {
+        termAgreementStatus: '',
+        idp: '',
+        username: username,
+        password: password,
+        rememberMe: 'on',
+      },
+    };
+
+    return payload;
+  }
+
+  private buildFinishOpenIDPayload(authCode: string): Payload {
     const message = {
       header: {
+        result: false,
+        error_code: '',
+        error_text: '',
+        info_text: '',
+        message_version: '',
+        login_session_id: '',
         trcode: Config.Endpoints.TOKEN_REFRESH,
         accessToken: '',
         refreshToken: '',
@@ -148,7 +147,7 @@ export class Authenticator extends Client {
         isMobile: 'M',
         langCd: 'en',
         osType: 1,
-        redirectUrl: Config.Auth.REDIRECT_URL,
+        redirectUrl: Config.Auth.REDIRECT_URL2,
         serviceCode: Config.Auth.SERVICE_CODE,
       },
     };

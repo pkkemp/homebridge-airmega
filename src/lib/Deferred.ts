@@ -34,5 +34,9 @@ export class Deferred<T> implements Promise<T> {
     this.rejectSelf(reason);
   }
 
+  public finally(onfinally?: (() => void) | undefined | null): Promise<T> {
+    return this.promise.finally(onfinally);
+  }
+
   [Symbol.toStringTag]: 'Promise';
 }

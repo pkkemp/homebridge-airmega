@@ -182,7 +182,8 @@ export class Client {
       headers: {
         'User-Agent': Config.USER_AGENT,
         'Content-Type': Config.ContentType.FORM,
-        Accept: 'application/json',
+        Accept: Config.ACCEPT2,
+        //Accept: 'application/json',
       },
       json: true,
       form: `message=${encodeURIComponent(JSON.stringify(message))}`,
