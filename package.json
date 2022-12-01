@@ -12,18 +12,14 @@
 	],
 	"license": "MIT",
 	"dependencies": {
-		"crypto-js": "^4.0.0",
 		"html-entities": "^2.3.3",
 		"node-html-parser": "^6.1.4",
 		"request": "^2.88",
-		"request-promise": "^4.2.4",
-		"store": "^2.0.12"
+		"request-promise": "^4.2.4"
 	},
 	"devDependencies": {
-		"@types/crypto-js": "^4.0.1",
 		"@types/node": "^14.14.35",
 		"@types/request-promise": "^4.1.41",
-		"@types/storejs": "^2.0.2",
 		"@typescript-eslint/eslint-plugin": "^4.18.0",
 		"@typescript-eslint/parser": "^4.18.0",
 		"eslint": "^7.22.0",
