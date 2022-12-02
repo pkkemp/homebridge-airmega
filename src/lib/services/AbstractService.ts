@@ -1,7 +1,6 @@
 import { Client } from '../Client';
 import { Purifier } from '../Purifier';
 import { Accessory } from '../interfaces/HAP';
-import { TokenStore } from '../TokenStore';
 
 export abstract class AbstractService {
   client: Client;
