@@ -7,7 +7,7 @@ import { AbstractService } from './AbstractService';
 export class LightbulbService extends AbstractService {
 
   register(): void {
-    let lightService = this.getOrCreateLightbulbService();
+    const lightService = this.getOrCreateLightbulbService();
 
     lightService.getCharacteristic(HAP.Characteristic.On)
       .on('get', this.getLightIndicator.bind(this))
@@ -18,7 +18,7 @@ export class LightbulbService extends AbstractService {
     let lightbulbService = this.accessory.getService(HAP.Service.Lightbulb);
 
     if (!lightbulbService) {
-       lightbulbService = this.accessory.addService(HAP.Service.Lightbulb, this.purifier.name + ' Light');
+      lightbulbService = this.accessory.addService(HAP.Service.Lightbulb, this.purifier.name + ' Light');
     }
 
     return lightbulbService;
@@ -26,13 +26,13 @@ export class LightbulbService extends AbstractService {
 
   async getLightIndicator(callback): Promise<void> {
     try {
-      let status = await this.purifier.waitForStatusUpdate();
+      const status = await this.purifier.waitForStatusUpdate();
 
-      if (status.power == Power.Off) {
+      if (status.power === Power.Off) {
         return callback(null, false);
       }
 
-      callback(null, status.light == Light.On);
+      callback(null, status.light === Light.On);
     } catch(e) {
       callback(e);
     }
