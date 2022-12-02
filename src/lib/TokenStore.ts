@@ -24,7 +24,7 @@ export class TokenStore {
     Logger.debug('Auth tokens are expired, refreshing...');
 
     try {
-      const authenticator = new Authenticator();
+      const authenticator = new Authenticator(this);
       const newTokens = await authenticator.refreshTokens(tokens);
 
       this.saveTokens(newTokens);

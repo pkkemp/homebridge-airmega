@@ -1,6 +1,7 @@
 import { Client } from './Client';
 import { AirQuality, Fan, FilterStatus, Light, Mode, Power, Status } from './interfaces/PurifierStatus';
 import { StatusUpdater } from './StatusUpdater';
+import { TokenStore } from './TokenStore';
 
 export class Purifier {
   id: string;
@@ -16,11 +17,11 @@ export class Purifier {
   purifierStatusUpdater: StatusUpdater<Status>;
   filterStatusUpdater: StatusUpdater<FilterStatus[]>;
 
-  constructor(id: string, name: string) {
+  constructor(id: string, name: string, tokenStore: TokenStore) {
     this.id = id;
     this.name = name;
 
-    this.client = new Client();
+    this.client = new Client(tokenStore);
 
     this.purifierStatusUpdater = new StatusUpdater<Status>();
     this.filterStatusUpdater = new StatusUpdater<FilterStatus[]>();

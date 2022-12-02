@@ -1,6 +1,7 @@
 import { Client } from '../Client';
 import { Purifier } from '../Purifier';
 import { Accessory } from '../interfaces/HAP';
+import { TokenStore } from '../TokenStore';
 
 export abstract class AbstractService {
   client: Client;
@@ -8,7 +9,7 @@ export abstract class AbstractService {
   accessory: Accessory;
 
   constructor(purifier: Purifier, accessory: Accessory) {
-    this.client = new Client();
+    this.client = purifier.client;
 
     this.purifier = purifier;
     this.accessory = accessory;

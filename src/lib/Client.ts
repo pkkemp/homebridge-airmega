@@ -9,8 +9,8 @@ import { TokenStore } from './TokenStore';
 export class Client {
   tokenStore: TokenStore;
 
-  constructor() {
-    this.tokenStore = new TokenStore();
+  constructor(tokenStore: TokenStore) {
+    this.tokenStore = tokenStore;
   }
 
   async getStatus(id: string): Promise<Status> {

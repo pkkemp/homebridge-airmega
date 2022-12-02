@@ -8,11 +8,13 @@ import { FilterService } from './services/FilterService';
 import { LightbulbService } from './services/LightbulbService';
 import { PurifierService } from './services/PurifierService';
 import { PluginConfig } from './interfaces/PluginConfig';
+import { TokenStore } from './TokenStore';
 
 export class AirmegaPlatform {
   platform: Platform;
   accessories: Map<string, Accessory>;
   log: Log;
+  private _tokenStore: TokenStore;
 
   constructor(log: Log, config: PluginConfig, platform: Platform) {
     Logger.setLogger(log, config.debug, config.diagnostic);
@@ -24,6 +26,8 @@ export class AirmegaPlatform {
       return;
     }
 
+    this._tokenStore = new TokenStore();
+
     this.platform.on('didFinishLaunching', () => {
       if (!config.username || !config.password) {
         throw Error('Username and password fields are required in config');
@@ -32,7 +36,7 @@ export class AirmegaPlatform {
       Logger.log('Authenticating...');
 
       try {
-        const authenticator = new Authenticator();
+        const authenticator = new Authenticator(this._tokenStore);
 
         authenticator.login(config.username, config.password).then(tokens => {
           authenticator.getPurifiers(tokens).then(purifiers => {
@@ -99,7 +103,7 @@ export class AirmegaPlatform {
 
   removeService(accessory: Accessory, service: Service): void {
     accessory.services.forEach(existingService => {
-      if (existingService.UUID == service.UUID) {
+      if (existingService.UUID === service.UUID) {
         accessory.removeService(existingService);
       }
     });

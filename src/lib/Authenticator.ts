@@ -28,7 +28,7 @@ export class Authenticator extends Client {
     const response = await request.post(payload);
     Logger.debug('Got response', response);
 
-    return response.body.deviceInfos.map(device => new Purifier(device.barcode, device.dvcNick));
+    return response.body.deviceInfos.map(device => new Purifier(device.barcode, device.dvcNick, this.tokenStore));
   }
 
   async refreshTokens(oldTokens: TokenPair): Promise<TokenPair> {
