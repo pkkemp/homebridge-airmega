@@ -40,7 +40,9 @@ export const Config = {
   },
 
   Filters : {
-    PRE_FILTER : '3121332',
-    MAIN_FILTER : '3104756', // previously 3111735
+    PRE_FILTER_HAP_SUBTYPE : 'pre',
+    PRE_FILTER_CODE : '3121332',
+    MAIN_FILTER_HAP_SUBTYPE : 'main',
+    MAIN_FILTER_CODE : '3104756', // previously 3111735
   },
 } as const;

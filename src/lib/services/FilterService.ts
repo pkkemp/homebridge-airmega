@@ -24,20 +24,20 @@ export class FilterService extends AbstractService {
   }
 
   getOrCreateMainFilterService(): Service {
-    let filterService = this.accessory.getServiceByUUIDAndSubType(HAP.Service.FilterMaintenance, 'main');
+    let filterService = this.accessory.getServiceByUUIDAndSubType(HAP.Service.FilterMaintenance, Config.Filters.MAIN_FILTER_HAP_SUBTYPE);
 
     if (!filterService) {
-      filterService = this.accessory.addService(HAP.Service.FilterMaintenance, this.purifier.name + ' Max2-filter', Config.Filters.MAIN_FILTER);
+      filterService = this.accessory.addService(HAP.Service.FilterMaintenance, this.purifier.name + ' Max2-filter', Config.Filters.MAIN_FILTER_HAP_SUBTYPE);
     }
 
     return filterService;
   }
 
   getOrCreatePreFilterService(): Service {
-    let filterService = this.accessory.getServiceByUUIDAndSubType(HAP.Service.FilterMaintenance, 'pre');
+    let filterService = this.accessory.getServiceByUUIDAndSubType(HAP.Service.FilterMaintenance, Config.Filters.PRE_FILTER_HAP_SUBTYPE);
 
     if (!filterService) {
-      filterService = this.accessory.addService(HAP.Service.FilterMaintenance, this.purifier.name +' Pre-filter', Config.Filters.PRE_FILTER);
+      filterService = this.accessory.addService(HAP.Service.FilterMaintenance, this.purifier.name +' Pre-filter', Config.Filters.PRE_FILTER_HAP_SUBTYPE);
     }
 
     return filterService;
@@ -45,7 +45,7 @@ export class FilterService extends AbstractService {
 
   async getMainFilterChangeIndication(callback): Promise<void> {
     try {
-      const indication = await this.getChangeIndicationForFilter(Config.Filters.MAIN_FILTER);
+      const indication = await this.getChangeIndicationForFilter(Config.Filters.MAIN_FILTER_CODE);
       callback(null, indication);
     } catch(e) {
       callback(e);
@@ -54,7 +54,7 @@ export class FilterService extends AbstractService {
 
   async getPreFilterChangeIndication(callback) {
     try {
-      const indication = await this.getChangeIndicationForFilter(Config.Filters.PRE_FILTER);
+      const indication = await this.getChangeIndicationForFilter(Config.Filters.PRE_FILTER_CODE);
       callback(null, indication);
     } catch(e) {
       callback(e);
@@ -63,7 +63,7 @@ export class FilterService extends AbstractService {
 
   async getMainFilterLifeLevel(callback): Promise<void> {
     try {
-      const lifeLevel = await this.getLifeLevelForFilter(Config.Filters.MAIN_FILTER);
+      const lifeLevel = await this.getLifeLevelForFilter(Config.Filters.MAIN_FILTER_CODE);
       callback(null, lifeLevel);
     } catch(e) {
       callback(e);
@@ -72,7 +72,7 @@ export class FilterService extends AbstractService {
 
   async getPreFilterLifeLevel(callback): Promise<void> {
     try {
-      const lifeLevel = await this.getLifeLevelForFilter(Config.Filters.PRE_FILTER);
+      const lifeLevel = await this.getLifeLevelForFilter(Config.Filters.PRE_FILTER_CODE);
       callback(null, lifeLevel);
     } catch(e) {
       callback(e);
