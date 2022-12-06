@@ -82,6 +82,7 @@ export class AirmegaPlatform {
     airQualityService.register();
 
     const filterService = new FilterService(purifier, accessory);
+    this.cleanupOldFilters(accessory);
     filterService.register();
 
     const lightService = new LightbulbService(purifier, accessory);
@@ -107,5 +108,18 @@ export class AirmegaPlatform {
         accessory.removeService(existingService);
       }
     });
+  }
+
+  // Some older versions of this plugin used the Coway protocol's filter codes as the Homebridge subtype.
+  // Clean out any old filter accessories that were registered using those potentially varying codes.
+  cleanupOldFilters(accessory: Accessory) {
+    for (const subtype of ['3111735', '3121332', '3104756']) {
+      const oldFilter = accessory.getServiceByUUIDAndSubType(HAP.Service.FilterMaintenance, subtype);
+      if (oldFilter) {
+        Logger.log(`Removing old filter registered as ${subtype}.`);
+        accessory.removeService(oldFilter);
+      }
+    }
+    this.platform.updatePlatformAccessories([accessory]);
   }
 }
