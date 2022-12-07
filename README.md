@@ -2,7 +2,7 @@
 
 Control and monitor your Airmega purifier with HomeKit.
 
-[![npm version](http://img.shields.io/npm/v/homebridge-airmega.svg)](https://npmjs.org/package/homebridge-airmega)
+[![npm version](http://img.shields.io/npm/v/@ohmantics/homebridge-airmega.svg)](https://npmjs.org/package/@ohmantics/homebridge-airmega)
 
 ## Functionality
 
