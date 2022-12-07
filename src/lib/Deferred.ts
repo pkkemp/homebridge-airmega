@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class Deferred<T> implements Promise<T> {
   private resolveSelf;
   private rejectSelf;

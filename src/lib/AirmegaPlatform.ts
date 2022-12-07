@@ -53,7 +53,7 @@ export class AirmegaPlatform {
     this.accessories.set(accessory.UUID, accessory);
   }
 
-  registerAccessory(purifier: Purifier, config: any): void {
+  registerAccessory(purifier: Purifier, config: PluginConfig): void {
     const uuid = HAP.UUID.generate(purifier.name);
     let accessory = this.accessories.get(uuid);
 
@@ -95,7 +95,7 @@ export class AirmegaPlatform {
   }
 
   shouldExcludeAccessory(config: PluginConfig, name: string) {
-    if (!config.hasOwnProperty('exclude')) {
+    if (!('exclude' in config)) {
       return false;
     }
 
