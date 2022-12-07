@@ -29,20 +29,20 @@ export enum AirQuality {
 }
 
 export interface Status {
-  power: Power
-  light: Light
-  fan: Fan
-  mode: Mode
-  airQuality: AirQuality
+  power: Power;
+  light: Light;
+  fan: Fan;
+  mode: Mode;
+  airQuality: AirQuality;
 }
 
 export interface FilterStatus {
-  name: string
-  lifeLevel: number
-  code: string
+  name: string;
+  lifeLevel: number;
+  code: string;
 }
 
 export interface Metadata {
-  nickname: string
-  barcode: string
+  nickname: string;
+  barcode: string;
 }

@@ -6,7 +6,7 @@ import { AbstractService } from './AbstractService';
 export class AirQualityService extends AbstractService {
 
   register(): void {
-    let airQualityService = this.getOrCreateAirQualityService();
+    const airQualityService = this.getOrCreateAirQualityService();
 
     airQualityService.getCharacteristic(HAP.Characteristic.AirQuality)
       .on('get', this.getAirQuality.bind(this));
@@ -26,7 +26,7 @@ export class AirQualityService extends AbstractService {
     let result;
 
     try {
-      let status = await this.purifier.waitForStatusUpdate();
+      const status = await this.purifier.waitForStatusUpdate();
 
       switch (status.airQuality) {
         case AirQuality.Excellent:

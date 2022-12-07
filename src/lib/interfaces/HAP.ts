@@ -50,12 +50,13 @@ export interface Log {
 }
 
 export interface AccessoryConfig {
-  error(...args: any[]): void
+  error(...args: any[]): void;
 }
 
 export interface Platform {
-  on(...args: any[]): void
+  on(...args: any[]): void;
   registerPlatformAccessories(...args: any[]): void;
+  updatePlatformAccessories(...args: any[]): void;
 }
 
 export interface UUID {

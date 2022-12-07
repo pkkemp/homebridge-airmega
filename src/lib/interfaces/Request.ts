@@ -16,24 +16,17 @@ export interface Payload {
   form: string;
 }
 
-export interface OAuthPayload {
+export interface OpenIDPayload {
   uri: string;
   headers: any;
   qs: any;
   resolveWithFullResponse?: boolean;
 }
 
-export interface AuthenticatePayload {
+export interface AuthCode2Payload {
   uri: string;
-  method: string;
   headers: any;
-  json: boolean;
-  body: AuthenticateBodyPayload;
-}
-
-export interface AuthenticateBodyPayload {
-  username: string;
-  password: string;
-  state: string;
-  auto_login: string;
+  form: any;
+  resolveWithFullResponse?: boolean;
+  simple?: boolean;
 }

@@ -8,7 +8,7 @@ export abstract class AbstractService {
   accessory: Accessory;
 
   constructor(purifier: Purifier, accessory: Accessory) {
-    this.client = new Client();
+    this.client = purifier.client;
 
     this.purifier = purifier;
     this.accessory = accessory;

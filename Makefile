@@ -6,7 +6,7 @@ default: build run
 debug: build inspect
 
 build:
-	tsc
+	npm run-script build
 
 run:
 	$(HOMEBRIDGE) -D -U $(PWD)/.homebridge -P $(PWD)
