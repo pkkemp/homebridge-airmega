@@ -1,0 +1,51 @@
+{
+    "pluginAlias": "Airmega",
+    "pluginType": "platform",
+    "schema": {
+      "type": "object",
+      "properties": {
+          "username": {
+              "title": "Name",
+              "type": "string",
+              "required": true,
+              "format": "email"
+          },
+          "password": {
+              "title": "Password",
+              "type": "string",
+              "required": true
+          },
+          "exclude": {
+              "title": "Sub-accessories to not expose to HomeKit:",
+              "type": "array",
+              "items": {
+                  "title": "exclude",
+                  "type": "string",
+                  "enum": [
+                      "lightbulb"
+                  ]
+              }
+          },
+          "debug": {
+              "title": "Enable Debug Mode?",
+              "type": "boolean",
+              "default": false
+          }
+      }
+    },
+    "form": [
+      "username",
+      "password",
+      {
+          "type": "fieldset",
+          "expandable": true,
+          "title": "Advanced",
+          "items": [
+              "exclude",
+              "debug"
+          ]
+      }
+    ],
+    "display": null
+  }
+  
