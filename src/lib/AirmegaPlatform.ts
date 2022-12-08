@@ -30,7 +30,8 @@ export class AirmegaPlatform {
 
     this.platform.on('didFinishLaunching', () => {
       if (!config.username || !config.password) {
-        throw Error('Username and password fields are required in config');
+        Logger.error('Username and password fields are required in config', Error());
+        return;
       }
 
       Logger.log('Authenticating...');
@@ -41,7 +42,11 @@ export class AirmegaPlatform {
         authenticator.login(config.username, config.password).then(tokens => {
           authenticator.getPurifiers(tokens).then(purifiers => {
             purifiers.forEach(purifier => this.registerAccessory(purifier, config));
+          }).catch(e => {
+            Logger.error('No purifiers', e);
           });
+        }).catch(e => {
+          Logger.error('Unable to authenticate', e);
         });
       } catch(e) {
         Logger.error('Unable to authenticate', e);

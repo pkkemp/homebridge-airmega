@@ -13,6 +13,10 @@ export class Authenticator extends Client {
 
   async login(username: string, password: string): Promise<TokenPair> {
     const authCode = await this.authenticateOpenID(username, password);
+
+    if (!authCode) {
+      throw Error('Couldn\'t get authentication code.');
+    }
     Logger.debug('got authCode', authCode);
     const tokens = await this.getTokensFromOpenIDAuthCode(authCode);
 
@@ -28,7 +32,10 @@ export class Authenticator extends Client {
     const response = await request.post(payload);
     Logger.debug('Got response', response);
 
-    return response.body.deviceInfos.map(device => new Purifier(device.barcode, device.dvcNick, this.tokenStore));
+    if (!response.body?.deviceInfos) {
+      throw Error('Coudln\'t get purifier list.');
+    }
+    return response.body?.deviceInfos.map(device => new Purifier(device.barcode, device.dvcNick, this.tokenStore));
   }
 
   async refreshTokens(oldTokens: TokenPair): Promise<TokenPair> {
@@ -68,7 +75,7 @@ export class Authenticator extends Client {
     Logger.debug('Get response2', response2);
 
     const location_hdr = response2.headers['location'];
-    return location_hdr.match(/[^&]+&code=(.*)/)[1];
+    return location_hdr?.match(/[^&]+&code=(.*)/)[1];
   }
 
   private async getTokensFromOpenIDAuthCode(authCode: string): Promise<TokenPair> {
