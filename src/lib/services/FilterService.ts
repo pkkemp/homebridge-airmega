@@ -21,6 +21,11 @@ export class FilterService extends AbstractService {
 
     preFilterService.getCharacteristic(HAP.Characteristic.FilterLifeLevel)
       .on('get', this.getPreFilterLifeLevel.bind(this));
+
+    // need to use linked services to get Apple's Home app to show the filter status
+    const purifierService = this.accessory.getService(HAP.Service.AirPurifier);
+    purifierService.addLinkedService(mainFilterService);
+    purifierService.addLinkedService(preFilterService);
   }
 
   getOrCreateMainFilterService(): Service {
