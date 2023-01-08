@@ -50,6 +50,10 @@
   "bugs": {
     "url": "https://github.com/ohmantics/homebridge-airmega/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ohmantics"
+  },
   "keywords": [
     "coway",
     "airmega",
