@@ -2,7 +2,7 @@
 
 Control and monitor your Airmega purifier with HomeKit.
 
-[![npm version](http://img.shields.io/npm/v/@ohmantics/homebridge-airmega.svg)](https://npmjs.org/package/@ohmantics/homebridge-airmega) [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
+[![npm version](http://img.shields.io/npm/v/@pkkemp/homebridge-airmega.svg)](https://npmjs.org/package/@pkkemp/homebridge-airmega) [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
 ## Functionality
 
@@ -72,6 +72,6 @@ Example of some Siri commands you can use:
 
 ## Notes
 
-* If you have a 250S, IconS, or other models not listed above, we'd like to [hear](https://github.com/ohmantics/homebridge-airmega/issues) from you.
+* If you have a 250S, IconS, or other models not listed above, we'd like to [hear](https://github.com/pkkemp/homebridge-airmega/issues) from you.
 * The Coway servers will ask you to change your password every 60 days. The plugin always defers that request.
 * HomeKit will only display the status of one filter per purifier in the accessory details. It appears to choose randomly which filter it shows, however the filter change notification will appear if any filter needs changing. We've filed feedback with Apple to improve this.

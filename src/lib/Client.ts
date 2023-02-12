@@ -148,6 +148,7 @@ export class Client {
           comdVal: value,
           funcId: code,
         }],
+        mqttDevice: true,
       },
     };
 
@@ -178,8 +179,12 @@ export class Client {
   }
 
   buildPayload(endpoint: string, message: Message): Payload {
+    var uri = `${Config.BASE_URI}`
+    if (endpoint === 'CWIG0603') {
+      uri = `${Config.CONTROL_BASE_URI}`
+    }
     const payload: Payload = {
-      uri: `${Config.BASE_URI}/${endpoint}.json`,
+      uri: uri+`/${endpoint}.json`,
       headers: {
         'User-Agent': Config.USER_AGENT,
         'Content-Type': Config.ContentType.FORM,
