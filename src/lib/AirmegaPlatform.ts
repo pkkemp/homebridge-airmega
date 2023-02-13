@@ -9,7 +9,6 @@ import { LightbulbService } from './services/LightbulbService';
 import { PurifierService } from './services/PurifierService';
 import { PluginConfig } from './interfaces/PluginConfig';
 import { TokenStore } from './TokenStore';
-import {PLATFORM_NAME} from "../settings";
 
 export class AirmegaPlatform {
   platform: Platform;
@@ -67,7 +66,7 @@ export class AirmegaPlatform {
       accessory = new HAP.Accessory(purifier.name, uuid);
       this.accessories.set(accessory.UUID, accessory);
 
-      this.platform.registerPlatformAccessories('homebridge-airmega-new', 'AirmegaNew', [accessory]);
+      this.platform.registerPlatformAccessories('homebridge-airmega', 'Airmega', [accessory]);
     }
 
     this.registerServices(purifier, accessory, config);
@@ -78,8 +77,8 @@ export class AirmegaPlatform {
   registerServices(purifier: Purifier, accessory: Accessory, config: PluginConfig): void {
     accessory.getService(HAP.Service.AccessoryInformation)
       .setCharacteristic(HAP.Characteristic.Manufacturer, 'Coway')
-      .setCharacteristic(HAP.Characteristic.Model, PLATFORM_NAME)
-      .setCharacteristic(HAP.Characteristic.SerialNumber, purifier.id);
+        .setCharacteristic(HAP.Characteristic.Model, 'Airmega')
+        .setCharacteristic(HAP.Characteristic.SerialNumber, purifier.id);
 
     const purifierService = new PurifierService(purifier, accessory);
     purifierService.register();
