@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 export const Config = {
   BASE_URI : 'https://iocareapp.coway.com/bizmob.iocare',
-  CONTROL_BASE_URI : 'https://d5zuhet69bkhw.cloudfront.net/bizmob.iocare',
   USER_AGENT : 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1 app',
   ACCEPT : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   ACCEPT2 : 'application/json, text/plain, */*',

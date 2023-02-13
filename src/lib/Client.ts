@@ -179,12 +179,8 @@ export class Client {
   }
 
   buildPayload(endpoint: string, message: Message): Payload {
-    var uri = `${Config.BASE_URI}`
-    if (endpoint === 'CWIG0603') {
-      uri = `${Config.CONTROL_BASE_URI}`
-    }
     const payload: Payload = {
-      uri: uri+`/${endpoint}.json`,
+      uri: `${Config.BASE_URI}/${endpoint}.json`,
       headers: {
         'User-Agent': Config.USER_AGENT,
         'Content-Type': Config.ContentType.FORM,
