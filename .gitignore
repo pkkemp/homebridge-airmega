@@ -4,6 +4,9 @@ dist
 # ignore local homebridge storage
 .homebridge
 
+# IDEA IDE files
+.idea
+
 # ------------- Defaults ------------- #
 
 # Logs
